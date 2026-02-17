@@ -1,0 +1,130 @@
+/* Home page styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f0f13;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #f0f0f5;
+}
+
+.home .content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 700px;
+}
+
+.home h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+}
+
+.home .subtitle {
+  font-size: 1.05rem;
+  color: #888;
+  margin-bottom: 3rem;
+}
+
+.home .tenant-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.home .tenant-card {
+  padding: 2rem;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+}
+
+.home .tenant-card:hover {
+  transform: translateY(-4px);
+}
+
+.home .tenant-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.home .tenant-card p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.home .tenant-card .port {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  font-family: monospace;
+}
+
+.home .misrut-card {
+  background: linear-gradient(135deg, #2c2420, #4a3a2e);
+  border: 1px solid #5a4a3e;
+  color: #faf8f5;
+}
+
+.home .misrut-card:hover {
+  box-shadow: 0 12px 30px rgba(196, 149, 106, 0.2);
+}
+
+.home .synrgy-card {
+  background: linear-gradient(135deg, #1a1a35, #13132a);
+  border: 1px solid #333355;
+  color: #f0f0f5;
+}
+
+.home .synrgy-card:hover {
+  box-shadow: 0 12px 30px rgba(108, 92, 231, 0.2);
+}
+
+.home .links {
+  margin-top: 1rem;
+}
+
+.home .admin {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: #222;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  border: 1px solid #333;
+}
+
+.home .admin:hover {
+  background: #333;
+}
+
+@media (max-width: 640px) {
+  .home .tenant-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .home h1 {
+    font-size: 2rem;
+  }
+}
