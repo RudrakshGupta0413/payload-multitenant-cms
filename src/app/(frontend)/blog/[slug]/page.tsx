@@ -1,16 +1,14 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import React from 'react'
-import Link from 'next/link'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
-import { RichText } from '@payloadcms/richtext-lexical/react'
 import { LivePreviewPost } from '../../../../components/LivePreviewPost'
 import '../../themes/misrut-theme.css'
 import '../../themes/synrgy-theme.css'
 
 interface PageProps {
     params: Promise<{
-        tenant: string
         slug: string
     }>
 }
@@ -23,9 +21,11 @@ function getCollectionSlug(tenantSlug: string): 'misrut-blogs' | 'synrgy-blogs' 
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-    const { tenant: tenantSlug, slug } = await params
+    const { slug } = await params
+    const headersList = await headers()
+    const tenantSlug = headersList.get('x-tenant')
 
-    if (tenantSlug !== 'misrut' && tenantSlug !== 'synrgy') {
+    if (!tenantSlug || (tenantSlug !== 'misrut' && tenantSlug !== 'synrgy')) {
         notFound()
     }
 

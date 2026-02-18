@@ -2,16 +2,11 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import React from 'react'
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import '../themes/misrut-theme.css'
 import '../themes/synrgy-theme.css'
 import '../themes/blog-listing.css'
-
-interface PageProps {
-    params: Promise<{
-        tenant: string
-    }>
-}
 
 function getCollectionSlug(tenantSlug: string): 'misrut-blogs' | 'synrgy-blogs' {
     if (tenantSlug === 'misrut') return 'misrut-blogs'
@@ -34,10 +29,11 @@ function getImageUrl(post: any): string | null {
     return null
 }
 
-export default async function TenantBlogListing({ params }: PageProps) {
-    const { tenant: tenantSlug } = await params
+export default async function BlogListingPage() {
+    const headersList = await headers()
+    const tenantSlug = headersList.get('x-tenant')
 
-    if (tenantSlug !== 'misrut' && tenantSlug !== 'synrgy') {
+    if (!tenantSlug || (tenantSlug !== 'misrut' && tenantSlug !== 'synrgy')) {
         notFound()
     }
 
@@ -80,7 +76,7 @@ export default async function TenantBlogListing({ params }: PageProps) {
 
             {/* ─── Featured / Hero Blog ─── */}
             <section className="featured-section">
-                <Link href={`/${tenantSlug}/${featuredPost.slug}`} className="featured-card">
+                <Link href={`/blog/${featuredPost.slug}`} className="featured-card">
                     <div className="featured-image-wrapper">
                         {getImageUrl(featuredPost) ? (
                             <img
@@ -112,7 +108,7 @@ export default async function TenantBlogListing({ params }: PageProps) {
                         {latestPosts.map((post) => (
                             <Link
                                 key={post.id}
-                                href={`/${tenantSlug}/${post.slug}`}
+                                href={`/blog/${post.slug}`}
                                 className="post-card"
                             >
                                 <div className="post-card-image-wrapper">
@@ -147,7 +143,7 @@ export default async function TenantBlogListing({ params }: PageProps) {
                         {editorsPicks.map((post) => (
                             <Link
                                 key={post.id}
-                                href={`/${tenantSlug}/${post.slug}`}
+                                href={`/blog/${post.slug}`}
                                 className="post-card"
                             >
                                 <div className="post-card-image-wrapper">

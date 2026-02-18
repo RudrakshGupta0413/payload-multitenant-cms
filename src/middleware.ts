@@ -15,20 +15,24 @@ export function middleware(request: NextRequest) {
         return NextResponse.next()
     }
 
-    // Check if already on a tenant route (e.g., /misrut/... or /synrgy/...)
-    const tenantSlugs = ['misrut', 'synrgy']
-    const firstSegment = pathname.split('/')[1]
-    if (tenantSlugs.includes(firstSegment)) {
+    // If already on /blog route, pass through
+    if (pathname.startsWith('/blog')) {
         return NextResponse.next()
     }
 
     // Read X-Tenant header injected by Nginx
+    const tenantSlugs = ['misrut', 'synrgy']
     const tenant = request.headers.get('x-tenant')
 
     if (tenant && tenantSlugs.includes(tenant)) {
-        // Rewrite root "/" or any path to "/<tenant>/..." 
+        // Rewrite root "/" to "/blog" (blog listing page)
         const url = request.nextUrl.clone()
-        url.pathname = `/${tenant}${pathname}`
+        if (pathname === '/') {
+            url.pathname = '/blog'
+        } else {
+            // For any other path, rewrite to /blog/... 
+            url.pathname = `/blog${pathname}`
+        }
         return NextResponse.rewrite(url)
     }
 
