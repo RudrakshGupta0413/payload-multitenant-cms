@@ -9,6 +9,7 @@ export const MisrutBlogs: CollectionConfig = {
     admin: {
         useAsTitle: 'title',
         group: 'Blogs',
+        defaultColumns: ['title', 'slug', 'sections', 'updatedAt'],
         livePreview: {
             url: 'http://localhost:3001',
         },
@@ -66,6 +67,28 @@ export const MisrutBlogs: CollectionConfig = {
             admin: {
                 hidden: true,
             },
+        },
+        {
+            name: 'sections',
+            type: 'select',
+            hasMany: true,
+            admin: {
+                position: 'sidebar',
+            },
+            options: [
+                {
+                    label: 'Featured Blog',
+                    value: 'featured',
+                },
+                {
+                    label: 'Latest Blog',
+                    value: 'latest',
+                },
+                {
+                    label: 'Editors Choice',
+                    value: 'editors-choice',
+                },
+            ],
         },
     ],
 }

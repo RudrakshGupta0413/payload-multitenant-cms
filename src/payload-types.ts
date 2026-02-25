@@ -202,6 +202,7 @@ export interface MisrutBlog {
   } | null;
   image?: (number | null) | Media;
   tenant?: (number | null) | Tenant;
+  sections?: ('featured' | 'latest' | 'editors-choice')[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -230,6 +231,7 @@ export interface SynrgyBlog {
   } | null;
   image?: (number | null) | Media;
   tenant?: (number | null) | Tenant;
+  sections?: ('featured' | 'latest' | 'editors-choice')[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -381,6 +383,7 @@ export interface MisrutBlogsSelect<T extends boolean = true> {
   content?: T;
   image?: T;
   tenant?: T;
+  sections?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -394,6 +397,7 @@ export interface SynrgyBlogsSelect<T extends boolean = true> {
   content?: T;
   image?: T;
   tenant?: T;
+  sections?: T;
   updatedAt?: T;
   createdAt?: T;
 }

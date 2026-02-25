@@ -47,15 +47,38 @@ export default async function BlogListingPage() {
     const tenant = tenantQuery.docs[0]
     if (!tenant) notFound()
 
-    const postsQuery = await payload.find({
+    const featuredPostsQuery = await payload.find({
         collection: collectionSlug,
-        sort: '-createdAt',
-        limit: 20,
+        where: {
+            sections: { equals: 'featured' },
+        },
+        sort: '-updatedAt',
+        limit: 1,
     })
 
-    const allPosts = postsQuery.docs
+    const latestPostsQuery = await payload.find({
+        collection: collectionSlug,
+        where: {
+            sections: { equals: 'latest' },
+        },
+        sort: '-updatedAt',
+        limit: 4,
+    })
 
-    if (allPosts.length === 0) {
+    const editorsPicksQuery = await payload.find({
+        collection: collectionSlug,
+        where: {
+            sections: { equals: 'editors-choice' },
+        },
+        sort: '-updatedAt',
+        limit: 3,
+    })
+
+    const featuredPost = featuredPostsQuery.docs[0]
+    const latestPosts = latestPostsQuery.docs
+    const editorsPicks = editorsPicksQuery.docs
+
+    if (!featuredPost && latestPosts.length === 0 && editorsPicks.length === 0) {
         return (
             <div className={`${tenantSlug} blog-page`}>
                 <div className="empty-state">
@@ -65,11 +88,6 @@ export default async function BlogListingPage() {
             </div>
         )
     }
-
-    // Split posts into sections
-    const featuredPost = allPosts[0]
-    const latestPosts = allPosts.slice(1, 5)    // Next 4 posts
-    const editorsPicks = allPosts.slice(5, 8)   // Next 3 posts
 
     return (
         <div className={`${tenantSlug} blog-page`}>
