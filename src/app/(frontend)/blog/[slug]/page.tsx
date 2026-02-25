@@ -4,8 +4,11 @@ import React from 'react'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { LivePreviewPost } from '../../../../components/LivePreviewPost'
+import { MisrutBlog, SynrgyBlog } from '@/payload-types'
 import '../../themes/misrut-theme.css'
 import '../../themes/synrgy-theme.css'
+
+type BlogType = MisrutBlog | SynrgyBlog
 
 interface PageProps {
     params: Promise<{
@@ -45,9 +48,9 @@ export default async function BlogPostPage({ params }: PageProps) {
     }
 
     return (
-        <>
+        <main className={`${tenantSlug} blog-detail-view`}>
             {/* LivePreviewPost handles real-time updates when loaded in admin iframe */}
-            <LivePreviewPost initialData={post} tenantSlug={tenantSlug} />
-        </>
+            <LivePreviewPost initialData={post as unknown as BlogType} />
+        </main>
     )
 }

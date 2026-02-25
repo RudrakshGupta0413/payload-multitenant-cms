@@ -23,9 +23,9 @@ export default function HomePage() {
         </div>
 
         <div className="links">
-          <a className="admin" href="/admin" rel="noopener noreferrer">
+          <Link className="admin" href="/admin">
             Go to Admin Panel
-          </a>
+          </Link>
         </div>
       </div>
     </div>

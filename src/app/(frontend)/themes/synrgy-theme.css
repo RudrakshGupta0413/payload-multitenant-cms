@@ -19,6 +19,17 @@
   min-height: 100vh;
 }
 
+.synrgy.blog-listing-view {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.synrgy.blog-listing-view .section-heading,
+.synrgy.blog-listing-view .featured-title,
+.synrgy.blog-listing-view .post-card-title {
+  color: #000000;
+}
+
 .synrgy .blog-header {
   text-align: center;
   padding: 4rem 2rem 2rem;
@@ -130,10 +141,21 @@
 }
 
 /* Blog detail page */
+.synrgy.blog-detail-view {
+  background-color: #ffffff;
+}
+
 .synrgy .blog-detail {
-  max-width: 760px;
+  background-color: #ffffff;
+  color: #000000;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 3rem 2rem;
+}
+
+.synrgy .blog-detail h1,
+.synrgy .blog-detail .content h2 {
+  color: #000000;
 }
 
 .synrgy .blog-detail .back-link {
@@ -179,6 +201,15 @@
 
 .synrgy .blog-detail .content p {
   margin: 0 0 1.2rem;
+}
+
+.synrgy .blog-detail .content img,
+.synrgy .blog-detail .content .payload-rich-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  margin: 1.5rem 0;
 }
 
 .synrgy .empty-state {

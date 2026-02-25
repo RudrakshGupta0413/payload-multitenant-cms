@@ -9,7 +9,7 @@ export const SynrgyBlogs: CollectionConfig = {
     admin: {
         useAsTitle: 'title',
         group: 'Blogs',
-        defaultColumns: ['title', 'slug', 'sections', 'updatedAt'],
+        defaultColumns: ['title', 'slug', 'sections', 'labels', 'updatedAt'],
         livePreview: {
             url: 'http://localhost:3002',
         },
@@ -87,6 +87,20 @@ export const SynrgyBlogs: CollectionConfig = {
                 {
                     label: 'Editors Choice',
                     value: 'editors-choice',
+                },
+            ],
+        },
+        {
+            name: 'labels',
+            type: 'array',
+            admin: {
+                position: 'sidebar',
+            },
+            fields: [
+                {
+                    name: 'label',
+                    type: 'text',
+                    required: true,
                 },
             ],
         },

@@ -1,6 +1,7 @@
 /* Misrut Theme — Light, Clean, Serif */
 
-.misrut {
+.misrut,
+.misrut.blog-listing-view {
   --bg-primary: #faf8f5;
   --bg-card: #ffffff;
   --bg-accent: #f0ebe3;
@@ -13,7 +14,7 @@
   --shadow: rgba(44, 36, 32, 0.06);
 
   font-family: 'Playfair Display', 'Georgia', serif;
-  background-color: var(--bg-primary);
+  background-color: #ffffff;
   color: var(--text-primary);
   min-height: 100vh;
 }
@@ -112,8 +113,12 @@
 }
 
 /* Blog detail page */
+.misrut.blog-detail-view {
+  background-color: #ffffff;
+}
+
 .misrut .blog-detail {
-  max-width: 720px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 3rem 2rem;
 }
@@ -162,6 +167,15 @@
 
 .misrut .blog-detail .content p {
   margin: 0 0 1.2rem;
+}
+
+.misrut .blog-detail .content img,
+.misrut .blog-detail .content .payload-rich-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin: 1.5rem 0;
 }
 
 .misrut .empty-state {

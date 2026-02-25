@@ -126,6 +126,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'super-admin' | 'client-admin';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -203,6 +204,12 @@ export interface MisrutBlog {
   image?: (number | null) | Media;
   tenant?: (number | null) | Tenant;
   sections?: ('featured' | 'latest' | 'editors-choice')[] | null;
+  labels?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -232,6 +239,12 @@ export interface SynrgyBlog {
   image?: (number | null) | Media;
   tenant?: (number | null) | Tenant;
   sections?: ('featured' | 'latest' | 'editors-choice')[] | null;
+  labels?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -326,6 +339,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -384,6 +398,12 @@ export interface MisrutBlogsSelect<T extends boolean = true> {
   image?: T;
   tenant?: T;
   sections?: T;
+  labels?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -398,6 +418,12 @@ export interface SynrgyBlogsSelect<T extends boolean = true> {
   image?: T;
   tenant?: T;
   sections?: T;
+  labels?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
