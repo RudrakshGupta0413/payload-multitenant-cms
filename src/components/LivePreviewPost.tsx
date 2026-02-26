@@ -3,6 +3,7 @@
 import { useLivePreview } from '@payloadcms/live-preview-react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import { Media, MisrutBlog, SynrgyBlog } from '@/payload-types'
 
@@ -19,20 +20,63 @@ export const LivePreviewPost: React.FC<{
     const { data } = useLivePreview<BlogType>({
         initialData,
         serverURL: serverURL || 'http://localhost:3000',
-        depth: 1, // Match the default payload.find depth to avoid mergeData TypeErrors
+        depth: 2, // Increased depth for better nested field support
     })
 
-    const image = data?.image as Media | undefined
+    const [isIframe, setIsIframe] = React.useState(false)
+
+    React.useEffect(() => {
+        setIsIframe(window.self !== window.top)
+    }, [])
+
+    // Fallback to initialData if live preview data is not available yet or empty
+    const activeData = data && Object.keys(data).length > 0 ? data : initialData
+    const image = activeData?.image as Media | undefined
 
     return (
         <div className="blog-detail">
+            {isIframe && (
+                <div className="live-preview-nav" style={{ marginBottom: '2rem' }}>
+                    <Link
+                        href="/blog"
+                        className="back-to-listing-btn"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            background: '#fff',
+                            color: '#000',
+                            textDecoration: 'none',
+                            fontSize: '1.5rem',
+                            fontWeight: '800',
+                            transition: 'all 0.2s ease',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+                            border: '1px solid rgba(0,0,0,0.05)',
+                        }}
+                        onMouseOver={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            e.currentTarget.style.transform = 'scale(1.05)'
+                            e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.2)'
+                        }}
+                        onMouseOut={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            e.currentTarget.style.transform = 'scale(1)'
+                            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)'
+                        }}
+                        title="Back to Blog Listing"
+                    >
+                        ←
+                    </Link>
+                </div>
+            )}
             {/* Title — click to edit */}
             <h1
                 data-live-preview-path="title"
                 style={{ cursor: 'pointer' }}
                 title="Click to edit title"
             >
-                {data.title || 'Untitled Post'}
+                {activeData.title || 'Untitled Post'}
             </h1>
 
             {/* Image — click to edit */}
@@ -44,7 +88,7 @@ export const LivePreviewPost: React.FC<{
                 >
                     <Image
                         src={image.url}
-                        alt={image.alt || data.title}
+                        alt={image.alt || activeData.title}
                         fill
                         className="hero-image"
                         style={{ objectFit: 'cover', borderRadius: '12px' }}
@@ -70,9 +114,9 @@ export const LivePreviewPost: React.FC<{
             )}
 
             {/* Labels — click to browse */}
-            {data.labels && data.labels.length > 0 && (
+            {activeData.labels && activeData.labels.length > 0 && (
                 <div className="post-detail-labels">
-                    {data.labels.map((item, i) => (
+                    {activeData.labels.map((item, i) => (
                         <a
                             key={i}
                             href={`/blog/label/${encodeURIComponent(item.label)}`}
@@ -91,8 +135,8 @@ export const LivePreviewPost: React.FC<{
                 style={{ cursor: 'text' }}
                 title="Click to edit content"
             >
-                {data.content ? (
-                    <RichText data={data.content} />
+                {activeData.content ? (
+                    <RichText data={activeData.content} />
                 ) : (
                     <p style={{ opacity: 0.4, fontStyle: 'italic' }}>
                         Start typing in the editor to see your content here...
@@ -101,7 +145,7 @@ export const LivePreviewPost: React.FC<{
             </div>
 
             <p className="slug-info" style={{ marginTop: '2rem', fontSize: '0.85rem', opacity: 0.4 }}>
-                Slug: {data.slug || '—'}
+                Slug: {activeData.slug || '—'}
             </p>
         </div>
     )

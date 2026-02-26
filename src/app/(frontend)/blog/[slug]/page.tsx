@@ -16,11 +16,58 @@ interface PageProps {
     }>
 }
 
+import { Metadata } from 'next'
+
 // Map tenant slug to collection slug
 function getCollectionSlug(tenantSlug: string): 'misrut-blogs' | 'synrgy-blogs' {
     if (tenantSlug === 'misrut') return 'misrut-blogs'
     if (tenantSlug === 'synrgy') return 'synrgy-blogs'
     return 'misrut-blogs'
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { slug } = await params
+    const headersList = await headers()
+    const tenantSlug = headersList.get('x-tenant')
+
+    if (!tenantSlug || (tenantSlug !== 'misrut' && tenantSlug !== 'synrgy')) {
+        return {}
+    }
+
+    const payload = await getPayload({ config: configPromise })
+    const collectionSlug = getCollectionSlug(tenantSlug)
+
+    const postsQuery = await payload.find({
+        collection: collectionSlug,
+        where: {
+            slug: { equals: slug },
+        },
+    })
+
+    const post = postsQuery.docs[0]
+    if (!post) {
+        return {}
+    }
+
+    const { meta } = post as any
+
+    return {
+        title: meta?.title || `BunderBrains — ${post.title}`,
+        description: meta?.description || post.title,
+        openGraph: {
+            title: meta?.title || post.title,
+            description: meta?.description || post.title,
+            images: meta?.image
+                ? [
+                    {
+                        url: (meta.image as any).url,
+                        width: (meta.image as any).width,
+                        height: (meta.image as any).height,
+                    },
+                ]
+                : [],
+        },
+    }
 }
 
 export default async function BlogPostPage({ params }: PageProps) {

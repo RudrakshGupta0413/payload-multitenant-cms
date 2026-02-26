@@ -2,6 +2,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -57,7 +58,14 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: ['misrut-blogs', 'synrgy-blogs'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }: any) => (doc?.title ? `BunderBrains — ${doc.title}` : 'BunderBrains'),
+      generateDescription: ({ doc }: any) => doc?.title || 'Explore our latest blog posts.',
+    }),
+  ],
   cors: [
     'http://localhost:3000',
     'http://localhost:3001',

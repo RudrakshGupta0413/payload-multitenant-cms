@@ -385,21 +385,26 @@
 }
 /* ───── Label & Tag Styles ───── */
 .post-labels {
-  display: flex;
+  display: flex !important;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 12px;
+  line-height: 1;
 }
 
 .blog-label {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #666;
-  background: #f0f0f0;
-  padding: 3px 10px;
-  border-radius: 20px;
-  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #555 !important;
+  background: #f0f0f0 !important;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
 }
 
 .label-more {
@@ -409,33 +414,37 @@
 }
 
 .synrgy .blog-label {
-  background: #f0f0f5;
-  color: #1a1a25;
+  background: #f0f0f5 !important;
+  color: #444 !important;
 }
 
 /* Post Detail Chips */
 .post-detail-labels {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 2.5rem;
 }
 
 .blog-label-chip {
-  text-decoration: none;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #333;
-  background: #f5f5f5;
-  padding: 6px 16px;
+  color: #333 !important;
+  background: #ffffff !important;
+  padding: 8px 18px;
   border-radius: 50px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
 .blog-label-chip:hover {
-  background: #eee;
-  transform: translateY(-1px);
+  background: #f8f8f8 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 /* Topic Navigation (Medium-style) */

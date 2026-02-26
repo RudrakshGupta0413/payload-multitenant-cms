@@ -11,7 +11,7 @@ export const MisrutBlogs: CollectionConfig = {
         group: 'Blogs',
         defaultColumns: ['title', 'slug', 'sections', 'labels', 'updatedAt'],
         livePreview: {
-            url: 'http://localhost:3001',
+            url: ({ data }) => `http://localhost:3001/blog/${data.slug}`,
         },
     },
     access: {

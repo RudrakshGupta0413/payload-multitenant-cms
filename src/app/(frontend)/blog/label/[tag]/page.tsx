@@ -12,10 +12,34 @@ import '../../../themes/blog-listing.css'
 
 type BlogType = MisrutBlog | SynrgyBlog
 
+import { Metadata } from 'next'
+
+// Map tenant slug to collection slug
 function getCollectionSlug(tenantSlug: string): 'misrut-blogs' | 'synrgy-blogs' {
     if (tenantSlug === 'misrut') return 'misrut-blogs'
     if (tenantSlug === 'synrgy') return 'synrgy-blogs'
     return 'misrut-blogs'
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
+    const { tag: rawTag } = await params
+    const tag = decodeURIComponent(rawTag)
+
+    const headersList = await headers()
+    const tenantSlug = headersList.get('x-tenant')
+
+    const siteName = tenantSlug === 'synrgy' ? 'Synrgy' : 'Misrut'
+    const title = `${tag} — ${siteName} Blog`
+    const description = `Read the latest articles about ${tag} on the ${siteName} blog.`
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+        },
+    }
 }
 
 function formatDate(dateStr: string): string {

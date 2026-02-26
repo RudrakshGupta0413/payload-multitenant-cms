@@ -13,10 +13,29 @@ import '../themes/blog-listing.css'
 
 type BlogType = MisrutBlog | SynrgyBlog
 
+import { Metadata } from 'next'
+
 function getCollectionSlug(tenantSlug: string): 'misrut-blogs' | 'synrgy-blogs' {
     if (tenantSlug === 'misrut') return 'misrut-blogs'
     if (tenantSlug === 'synrgy') return 'synrgy-blogs'
     return 'misrut-blogs'
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+    const headersList = await headers()
+    const tenantSlug = headersList.get('x-tenant')
+
+    const title = tenantSlug === 'synrgy' ? 'Synrgy Blog — Insights & Updates' : 'Misrut Blog — Insights & Updates'
+    const description = `Explore the latest articles, news, and insights from ${tenantSlug === 'synrgy' ? 'Synrgy' : 'Misrut'}.`
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+        },
+    }
 }
 
 function formatDate(dateStr: string): string {
