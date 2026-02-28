@@ -15,8 +15,8 @@ export function middleware(request: NextRequest) {
         return NextResponse.next()
     }
 
-    // If already on /blog route, pass through
-    if (pathname.startsWith('/blog')) {
+    // If already on /blog or /generate route, pass through
+    if (pathname.startsWith('/blog') || pathname.startsWith('/generate')) {
         return NextResponse.next()
     }
 

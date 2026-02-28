@@ -17,11 +17,11 @@ const richText = (text: string) => ({
 })
 
 async function seed() {
-    console.log('🌱 Starting seed...\n')
+    console.log(' Starting seed...\n')
     const payload = await getPayload({ config })
 
     // Clean up
-    console.log('🧹 Cleaning up...')
+    console.log(' Cleaning up...')
     try {
         for (const col of ['misrut-blogs', 'synrgy-blogs', 'tenants'] as const) {
             const existing = await payload.find({ collection: col, limit: 100 })
@@ -32,7 +32,7 @@ async function seed() {
     } catch (_) { }
 
     // Tenants
-    console.log('📌 Creating tenants...')
+    console.log(' Creating tenants...')
     const misrut = await payload.create({
         collection: 'tenants',
         data: { title: 'Misrut', slug: 'misrut', domain: 'misrut.localhost' },
@@ -43,7 +43,7 @@ async function seed() {
     })
 
     // Admin user
-    console.log('👤 Creating admin...')
+    console.log(' Creating admin...')
     const existingUsers = await payload.find({
         collection: 'users',
         where: { email: { equals: 'admin@example.com' } },
@@ -51,13 +51,13 @@ async function seed() {
     if (existingUsers.docs.length === 0) {
         await payload.create({
             collection: 'users',
-            data: { email: 'admin@example.com', password: 'admin123' },
+            data: { email: 'admin@example.com', password: 'admin123', role: 'super-admin' } as any,
         })
-        console.log('  ✅ admin@example.com / admin123')
+        console.log(' admin@example.com / admin123')
     }
 
     // ─── Misrut Blog Posts (8 posts) ───
-    console.log('\n📝 Creating Misrut blogs...')
+    console.log('\n Creating Misrut blogs...')
     const misrutPosts = [
         { title: 'The Art of Minimalist Design', slug: 'the-art-of-minimalist-design', sections: ['featured'], content: richText('Less is more. In a world overloaded with information, minimalist design cuts through the noise and speaks directly to the user. We explore the principles that guide our design philosophy at Misrut.') },
         { title: 'Building Scalable Web Applications', slug: 'building-scalable-web-apps', sections: ['latest'], content: richText('Scalability isn\'t an afterthought — it\'s a mindset. From database design to API architecture, every decision matters when you\'re building for millions of users.') },
@@ -70,11 +70,11 @@ async function seed() {
     ]
     for (const post of misrutPosts) {
         await payload.create({ collection: 'misrut-blogs', data: { ...post, tenant: misrut.id } as any })
-        console.log(`  ✅ ${post.title}`)
+        console.log(`   ${post.title}`)
     }
 
     // ─── Synrgy Blog Posts (8 posts) ───
-    console.log('\n📝 Creating Synrgy blogs...')
+    console.log('\n Creating Synrgy blogs...')
     const synrgyPosts = [
         { title: '12 Customer Satisfaction Questions That Reveal Real Insights', slug: '12-customer-satisfaction-questions', sections: ['featured'], content: richText('Customer satisfaction surveys getting vague answers? The problem isn\'t your customers — it\'s your questions. Use these 12 CSAT questions to ask the right questions at the right time.') },
         { title: 'Keep It Moving: From Forms to Workflows', slug: 'keep-it-moving-forms-to-workflows', sections: ['latest'], content: richText('Forms are just the beginning. Learn how to transform static form submissions into dynamic, automated workflows that save time and reduce manual effort.') },
@@ -87,13 +87,13 @@ async function seed() {
     ]
     for (const post of synrgyPosts) {
         await payload.create({ collection: 'synrgy-blogs', data: { ...post, tenant: synrgy.id } as any })
-        console.log(`  ✅ ${post.title}`)
+        console.log(`   ${post.title}`)
     }
 
-    console.log('\n🎉 Seeding complete!')
+    console.log('\n Seeding complete!')
     console.log(`  • ${misrutPosts.length} Misrut blogs, ${synrgyPosts.length} Synrgy blogs`)
     console.log('  • 1 Featured + 4 Latest + 3 Editors Choice per tenant\n')
     process.exit(0)
 }
 
-seed().catch((err) => { console.error('❌ Seed failed:', err); process.exit(1) })
+seed().catch((err) => { console.error(' Seed failed:', err); process.exit(1) })

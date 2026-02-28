@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -62,8 +63,25 @@ export default buildConfig({
     seoPlugin({
       collections: ['misrut-blogs', 'synrgy-blogs'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }: any) => (doc?.title ? `BunderBrains — ${doc.title}` : 'BunderBrains'),
-      generateDescription: ({ doc }: any) => doc?.title || 'Explore our latest blog posts.',
+      generateTitle: ({ doc }: { doc: { title?: string } }) => (doc?.title ? `BunderBrains — ${doc.title}` : 'BunderBrains'),
+      generateDescription: ({ doc }: { doc: { title?: string } }) => doc?.title || 'Explore our latest blog posts.',
+    }),
+    s3Storage({
+      collections: {
+        media: {
+          prefix: 'blog',
+        },
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+        region: process.env.S3_REGION,
+        endpoint: process.env.S3_ENDPOINT,
+        forcePathStyle: true, // Useful for local S3-compatible storage like MinIO
+      },
     }),
   ],
   cors: [
