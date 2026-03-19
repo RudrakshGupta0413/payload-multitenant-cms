@@ -16,6 +16,10 @@ import { SynrgyBlogs } from './collections/SynrgyBlogs'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+if (!process.env.PAYLOAD_SECRET) {
+  throw new Error('PAYLOAD_SECRET is missing')
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -49,7 +53,7 @@ export default buildConfig({
       }),
     ],
   }),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -84,12 +88,12 @@ export default buildConfig({
       },
     }),
   ],
-  cors: [
+  cors: process.env.CORS_ORIGINS?.split(',') || [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
   ],
-  csrf: [
+  csrf: process.env.CSRF_ORIGINS?.split(',') || [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',

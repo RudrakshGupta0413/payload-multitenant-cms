@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isSuperAdminOrTenant } from '../utils/accessControl'
 
 export const SynrgyBlogs: CollectionConfig = {
     slug: 'synrgy-blogs',
@@ -16,9 +17,9 @@ export const SynrgyBlogs: CollectionConfig = {
     },
     access: {
         read: () => true,
-        create: ({ req: { user } }) => !!user,
-        update: ({ req: { user } }) => !!user,
-        delete: ({ req: { user } }) => !!user,
+        create: isSuperAdminOrTenant('synrgy'),
+        update: isSuperAdminOrTenant('synrgy'),
+        delete: isSuperAdminOrTenant('synrgy'),
     },
     hooks: {
         beforeChange: [

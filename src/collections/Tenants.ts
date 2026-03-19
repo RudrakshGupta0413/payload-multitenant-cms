@@ -8,9 +8,9 @@ export const Tenants: CollectionConfig = {
     },
     access: {
         read: () => true,
-        create: ({ req: { user } }) => !!user,
-        update: ({ req: { user } }) => !!user,
-        delete: ({ req: { user } }) => !!user,
+        create: ({ req: { user } }) => user?.role === 'super-admin',
+        update: ({ req: { user } }) => user?.role === 'super-admin',
+        delete: ({ req: { user } }) => user?.role === 'super-admin',
     },
     fields: [
         {

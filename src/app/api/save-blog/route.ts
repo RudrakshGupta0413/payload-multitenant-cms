@@ -1,9 +1,20 @@
+import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
     try {
+        const payload = await getPayload({ config: configPromise })
+        const { user } = await payload.auth({ headers: await headers() })
+
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Unauthorized. Please log in to save blog posts.' },
+                { status: 401 },
+            )
+        }
+
         const { title, slug, content, tenants } = await request.json()
 
         // Basic validation
@@ -14,7 +25,6 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const payload = await getPayload({ config: configPromise })
         const results = []
 
         for (const tenantSlug of tenants) {
@@ -43,11 +53,13 @@ export async function POST(request: NextRequest) {
             message: `Successfully saved to ${results.length} website(s)!`,
             results,
         })
-    } catch (error: any) {
+    } catch (error) {
         console.error('Save blog error:', error)
 
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
         // Handle duplicate slug errors from Payload/Postgres
-        if (error?.message?.includes('slug') && error?.message?.includes('unique')) {
+        if (errorMessage.includes('slug') && errorMessage.includes('unique')) {
             return NextResponse.json(
                 { error: 'A blog with this slug already exists. Please change the title or edit the existing blog.' },
                 { status: 409 },
@@ -55,7 +67,7 @@ export async function POST(request: NextRequest) {
         }
 
         return NextResponse.json(
-            { error: error?.message || 'Failed to save blog to CMS. Please try again.' },
+            { error: errorMessage || 'Failed to save blog to CMS. Please try again.' },
             { status: 500 },
         )
     }

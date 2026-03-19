@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { getPayload } from 'payload'
+import configPromise from '@/payload.config'
+import { headers } from 'next/headers'
 
 const SYSTEM_PROMPT = `You are a professional blog writer. Given a topic/prompt, write a detailed, engaging, well-structured blog post.
 
@@ -99,6 +102,16 @@ async function generateWithRetry(model: any, prompt: string, retries = 3, delay 
 
 export async function POST(request: NextRequest) {
     try {
+        const payload = await getPayload({ config: configPromise })
+        const { user } = await payload.auth({ headers: await headers() })
+
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Unauthorized. Please log in to generate blog posts.' },
+                { status: 401 },
+            )
+        }
+
         const { prompt } = await request.json()
 
         if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {

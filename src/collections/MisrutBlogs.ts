@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isSuperAdminOrTenant } from '../utils/accessControl'
 
 export const MisrutBlogs: CollectionConfig = {
     slug: 'misrut-blogs',
@@ -16,9 +17,9 @@ export const MisrutBlogs: CollectionConfig = {
     },
     access: {
         read: () => true,
-        create: ({ req: { user } }) => !!user,
-        update: ({ req: { user } }) => !!user,
-        delete: ({ req: { user } }) => !!user,
+        create: isSuperAdminOrTenant('misrut'),
+        update: isSuperAdminOrTenant('misrut'),
+        delete: isSuperAdminOrTenant('misrut'),
     },
     hooks: {
         beforeChange: [
